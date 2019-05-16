@@ -9,19 +9,17 @@
         <meta name="keywords" content="欢迎使用SZ后端开发框架">
     
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-    <meta name="description" content="介绍  SZ 是一套基于 前后端分离 的思想, 专门用于 后端 (业务,应用服务器)的 快速开发框架. 开发语言: kotlin 中文站点 SZ 是从 Play Framework 中得到的启发, 底层框架是采用 vertx 为基础开发而来的.  Java Web development without J2EE, 完全基于 J2SE, JDK 版本要求: JDK 1.8 及以上  前后端分离 什">
+    <meta name="description" content="介绍  SZ 是一套基于 前后端分离 的思想, 专门用于 后端 (业务,应用服务器)的 快速开发框架. 开发语言: kotlin 中文站点 SZ 是从 Play Framework 中得到的启发, 底层框架是采用 vertx 为基础开发而来的.  Java Web development without J2EE, 完全基于 J2SE, JDK 版本要求: JDK 8">
 <meta property="og:type" content="article">
 <meta property="og:title" content="欢迎使用SZ后端开发框架">
 <meta property="og:url" content="http://loveinshenzhen.github.io/2019/05/15/welcome_to_use_sz/index.html">
 <meta property="og:site_name" content="LoveInShenZhen">
-<meta property="og:description" content="介绍  SZ 是一套基于 前后端分离 的思想, 专门用于 后端 (业务,应用服务器)的 快速开发框架. 开发语言: kotlin 中文站点 SZ 是从 Play Framework 中得到的启发, 底层框架是采用 vertx 为基础开发而来的.  Java Web development without J2EE, 完全基于 J2SE, JDK 版本要求: JDK 1.8 及以上  前后端分离 什">
+<meta property="og:description" content="介绍  SZ 是一套基于 前后端分离 的思想, 专门用于 后端 (业务,应用服务器)的 快速开发框架. 开发语言: kotlin 中文站点 SZ 是从 Play Framework 中得到的启发, 底层框架是采用 vertx 为基础开发而来的.  Java Web development without J2EE, 完全基于 J2SE, JDK 版本要求: JDK 8">
 <meta property="og:locale" content="default">
-<meta property="og:image" content="https://kklongming.github.io/res/images/diagram_1.jpg">
-<meta property="og:updated_time" content="2019-05-15T13:29:37.750Z">
+<meta property="og:updated_time" content="2019-05-16T16:24:08.728Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="欢迎使用SZ后端开发框架">
-<meta name="twitter:description" content="介绍  SZ 是一套基于 前后端分离 的思想, 专门用于 后端 (业务,应用服务器)的 快速开发框架. 开发语言: kotlin 中文站点 SZ 是从 Play Framework 中得到的启发, 底层框架是采用 vertx 为基础开发而来的.  Java Web development without J2EE, 完全基于 J2SE, JDK 版本要求: JDK 1.8 及以上  前后端分离 什">
-<meta name="twitter:image" content="https://kklongming.github.io/res/images/diagram_1.jpg">
+<meta name="twitter:description" content="介绍  SZ 是一套基于 前后端分离 的思想, 专门用于 后端 (业务,应用服务器)的 快速开发框架. 开发语言: kotlin 中文站点 SZ 是从 Play Framework 中得到的启发, 底层框架是采用 vertx 为基础开发而来的.  Java Web development without J2EE, 完全基于 J2SE, JDK 版本要求: JDK 8">
     
 
     
@@ -169,6 +167,24 @@
                             SZ 后端开发框架
                         </a>
                          <ul class="unstyled" id="tree"> 
+                    <li class="directory">
+                        <a href="#" data-role="directory">
+                            <i class="fa fa-folder"></i>
+                            &nbsp;
+                            关于前后端分离
+                        </a>
+                         <ul class="unstyled" id="tree">  <li class="file"><a href="/2019/05/16/front_and_back_end/">前后端分离</a></li>  </ul> 
+                    </li> 
+                    
+                    <li class="directory">
+                        <a href="#" data-role="directory">
+                            <i class="fa fa-folder"></i>
+                            &nbsp;
+                            快速入门
+                        </a>
+                         <ul class="unstyled" id="tree">  <li class="file"><a href="/2019/05/16/create_new_prj/">新建项目</a></li>  </ul> 
+                    </li> 
+                    
                     <li class="directory open">
                         <a href="#" data-role="directory">
                             <i class="fa fa-folder-open"></i>
@@ -296,7 +312,7 @@
             
                 <div id="toc" class="toc-article">
                 <strong class="toc-title">Catalogue</strong>
-                    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#介绍"><span class="toc-number">1.</span> <span class="toc-text">介绍</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#前后端分离"><span class="toc-number">2.</span> <span class="toc-text">前后端分离</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#什么是前后端分离"><span class="toc-number">2.1.</span> <span class="toc-text">什么是前后端分离?</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#为什么要采用前后端分离的方式进行开发"><span class="toc-number">2.2.</span> <span class="toc-text">为什么要采用前后端分离的方式进行开发?</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#参考资料"><span class="toc-number">3.</span> <span class="toc-text">参考资料</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#etag"><span class="toc-number">3.1.</span> <span class="toc-text">ETag</span></a></li></ol></li></ol>
+                    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#介绍"><span class="toc-number">1.</span> <span class="toc-text">介绍</span></a></li></ol>
                 </div>
             
         
@@ -307,47 +323,8 @@
 <li>开发语言: <strong><a href="https://kotlinlang.org/" target="_blank" rel="noopener">kotlin</a></strong> <em><a href="https://www.kotlincn.net/" target="_blank" rel="noopener">中文站点</a></em></li>
 <li><strong>SZ</strong> 是从 <strong><a href="https://www.playframework.com/" target="_blank" rel="noopener">Play Framework</a></strong> 中得到的启发, 底层框架是采用 <strong><a href="https://vertx.io/" target="_blank" rel="noopener">vertx</a></strong> 为基础开发而来的.<br>
 </li>
-<li>Java Web development <em><strong>without J2EE</strong></em>, 完全基于 <strong>J2SE</strong>, JDK 版本要求: <strong>JDK 1.8</strong> 及以上</li>
+<li>Java Web development <em><strong>without J2EE</strong></em>, 完全基于 <strong>J2SE</strong>, JDK 版本要求: <strong>JDK 8</strong></li>
 </ul>
-<h2 id="前后端分离">前后端分离</h2>
-<h3 id="什么是前后端分离">什么是前后端分离?</h3>
-<ul>
-<li>核心思想是前端 <strong>HTML纯静态页面</strong> 通过 <strong>Ajax</strong> 调用后端的 <strong>Http API</strong> 接口并使用 <strong>JSON</strong> 数据进行交互</li>
-</ul>
-<center>
-<img src="https://kklongming.github.io/res/images/diagram_1.jpg" width="50%"> 前后端分离示意图
-</center>
-<h3 id="为什么要采用前后端分离的方式进行开发">为什么要采用前后端分离的方式进行开发?</h3>
-<ul>
-<li>前端和后端开发人员的技术技能, 思维方式是不一样的</li>
-</ul>
-<blockquote>
-<ol type="1">
-<li>前端开发人员, 主要处理的问题是页面展现, 用户交互. 需要处理很多跟美术设计, 用户交互设计相关的问题.</li>
-<li>后端开发人员, 主要处理的问题是业务逻辑如何实现, 数据如何查询,存储,更新.</li>
-<li>从思维方式上可以看出, 前端对形象思维能力要求高, 而后端对逻辑思维能力要求高. 对普通人而言, 这2中思维方式很难同时拥有较高的水准.</li>
-</ol>
-</blockquote>
-<ul>
-<li><strong>Web 前端</strong> 和 <strong>移动端App</strong> 可以重用后端的 <strong>Http Api</strong></li>
-<li>在生产环境下可以节省带宽, 从而降低成本费用</li>
-</ul>
-<blockquote>
-<p>一般采用nginx做静态HTML页面的host, 启用 ETag. 现代的浏览器基本上都支持 ETag. 浏览器对静态资源访问过一次后就会缓存下了. 下次访问的时候, 服务端(Nginx)会检查请求中的ETag与当前请求的资源的ETag是否一致, 如果一致, 返回的Response会告诉浏览器,你要访问的静态资源, 与你缓存里的一致. 这样, 只要静态页面资源(html,js,css,img...)不发生变化, 后续的访问就不需要实际传输静态资源的内容了, 流量带宽就这么省下来了. 而数据部分, 是浏览器通过Ajax调用后端的Http Api获取的json数据, 而api占用的带宽资源相对于原来整个页面加载来说, 是很小的一部分. 并且, 对查询类的api, 后端也可以同样实现ETag的支持.</p>
-</blockquote>
-<ul>
-<li>在部署时, <strong>静态页面</strong> 和 <strong>Http Api</strong> 可以部署在不同的子域名下, 不同的子域名可以配置不同的外网IP, 设置不同的带宽. 具体的配置方法, 会在单独的 <strong>部署</strong> 分类的文当中细述</li>
-</ul>
-<h2 id="参考资料">参考资料</h2>
-<h3 id="etag">ETag</h3>
-<blockquote>
-<ul>
-<li><a href="https://baike.baidu.com/item/ETag/4419019?fr=aladdin" target="_blank" rel="noopener">ETag 百度百科</a></li>
-<li><a href="https://www.jianshu.com/p/3e2afe089e11" target="_blank" rel="noopener">初识HTTP缓存-ETag</a></li>
-<li><a href="http://nginx.org/en/docs/http/ngx_http_core_module.html#etag" target="_blank" rel="noopener">Nginx ETag配置(官网)</a></li>
-<li><a href="http://www.t086.com/article/5207" target="_blank" rel="noopener">Nginx配置启用ETag提高访问速度</a></li>
-</ul>
-</blockquote>
 
             </div>
         
@@ -358,6 +335,20 @@
 
 
     
+<nav id="article-nav">
+    
+        <a href="/2019/05/16/front_and_back_end/" id="article-nav-newer" class="article-nav-link-wrap">
+            <strong class="article-nav-caption">Newer</strong>
+            <div class="article-nav-title">
+                
+                    前后端分离
+                
+            </div>
+        </a>
+    
+    
+</nav>
+
 
 
 
