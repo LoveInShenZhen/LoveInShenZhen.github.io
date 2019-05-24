@@ -14,6 +14,36 @@
   <script src="//cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
 </head>
 
+<style type="text/css">
+
+  .app-sub-sidebar {
+    width: 160px;
+    position: fixed;
+    top: 100px;
+    right: 50px;
+    background: #fff;
+    font-size: xx-small;
+  }
+
+  .app-sub-sidebar::before {
+    position: absolute;
+    top: -35px;
+    left: 0;
+    width: 100%;
+    display: block;
+    margin-left: 15px;
+    content: '本文目录';
+    font-weight: bold;
+    font-size: xx-small;
+  }
+
+  .app-sub-sidebar li.active {
+    box-shadow: inset 8px -4px 0px -4px #52abff;
+    background-color: #fff;
+    font-size: xx-small;
+  }
+</style>
+
 <body>
   <div id="app"></div>
   <script>
@@ -24,7 +54,13 @@
       name: 'IT写轮眼',
       repo: 'https://github.com/LoveInShenZhen/sz-vertx-kotlin',
       loadSidebar: true,
-      subMaxLevel: 5,
+      alias: {
+        '/.*/_sidebar.md': '/_sidebar.md'
+      },
+      // autoHeader: true,
+      // maxLevel: 1,
+      subMaxLevel: 3,
+      auto2top: true,
       plantuml: {
         skin: 'classic',
         serverPath: 'http://149.129.84.37:8080/svg/'
@@ -56,10 +92,11 @@
   </script>
   <!-- CDN files for docsify-katex -->
   <script src="//cdn.jsdelivr.net/npm/docsify-katex@latest/dist/docsify-katex.js"></script>
-  <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/katex@latest/dist/katex.min.css"/>
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/katex@latest/dist/katex.min.css" />
 
 
-  <script src="//unpkg.com/docsify/lib/docsify.min.js"></script>
+  <!-- <script src="//unpkg.com/docsify/lib/docsify.min.js"></script> -->
+  <script src="https://doc.open-uc.cn/lib/docsify.js"></script>
   <!-- 全文搜索 - Search -->
   <script src="//unpkg.com/docsify/lib/plugins/search.js"></script>
   <!-- 在所有的代码块上添加一个简单的Click to copy按钮来允许用户从你的文档中轻易地复制代码 -->

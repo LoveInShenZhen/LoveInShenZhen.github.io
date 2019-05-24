@@ -1,6 +1,6 @@
 # 新建项目 
 ---
-
+    
 ## 安装构建依赖
 * 安装好 **subversion**, 获取项目工程模板时会用到
 * 安装好 **JDK 8**
@@ -86,8 +86,8 @@ gradle run
 * API接口文档列表页面
 > ![API接口文档列表页面](../../img/apiIndex_page.png)
 
-* API接口测试页面
-> ![API接口测试页面](../../img/api_test_page.png)
+* API接口测试页面, 填入参数, 点击**测试**按钮
+> ![API接口测试页面](../../img/api_sample_hello.png)
 
 ## 查看自动生成的API接口文档
 * 点击 [http://localhost:9000/api/builtin/doc/apiDocHtml](http://localhost:9000/api/builtin/doc/apiDocHtml) 查看自动生成的API接口文档
