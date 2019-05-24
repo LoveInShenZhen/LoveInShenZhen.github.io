@@ -4,4 +4,7 @@
     * [新建项目](/sz_framework/quick_start/create_new_prj.md)
     * [新增API](/sz_framework/quick_start/new_api.md)
     * [sz-json api 规范](/sz_framework/json_api_spec.md)
+    * [http 路由配置](/sz_framework/http_route.md)
+    * [配置文件](/sz_framework/application_conf.md)
   * [前后端分离](/sz_framework/front_and_backend.md)
+    

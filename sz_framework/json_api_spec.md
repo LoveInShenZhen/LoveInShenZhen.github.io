@@ -28,18 +28,21 @@
 ### **UTF-8** 字符编码
 * Request 和 Response 的字符编码要求是: charset=utf-8
 
-### GET 方式
+### api参数传递方式
+* 每个api请求(http request), 会根据route配置, 指定对应的控制器类(实例)的某个方法去处理
+* 该控制器方法上可以定义若干参数, 这些参数的值, 要求通过 **Query String** 方式进行传递, 按照参数名称传值, 与顺序无关
+* 控制器方法的参数类型有要求, 只支持如下几种:   
 
-?> _TODO_
+|       类型名称       |
+| -------------------- |
+| kotlin.String        |
+| kotlin.Int           |
+| kotlin.Short         |
+| kotlin.Byte          |
+| kotlin.Long          |
+| kotlin.Float         |
+| kotlin.Double        |
+| kotlin.Boolean       |
+| java.math.BigDecimal |
 
-### POST Form 方式
-
-?> _TODO_
-
-### POST Json 方式
-
-?> _TODO_
-
-### HEAD 方式
-
-### 参考
+> 如果要用到其他不支持的类型, 请以 **String** 的方式传递, 在控制器方法里实现相应的转换操作
