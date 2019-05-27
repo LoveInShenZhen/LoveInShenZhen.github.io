@@ -10,7 +10,7 @@
 ### 配置文件读取所使用的java库
 * [Typesafe Config](https://lightbend.github.io/config/) 
 * [github 站点](https://github.com/lightbend/config)
-* [Javadoc](https://lightbend.github.io/config/latest/api/)
+* [Java doc](https://lightbend.github.io/config/latest/api/)
 
 ### 在sz框架里面读取配置
 * 通过一个全局的 **sz.scaffold.Application** object 提供的 **config** 属性来读取 conf/application.conf 配置文件里对应的配置项
