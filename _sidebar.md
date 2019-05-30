@@ -6,5 +6,8 @@
     * [sz-json api 规范](/sz_framework/json_api_spec.md)
     * [http 路由配置](/sz_framework/http_route.md)
     * [配置文件](/sz_framework/application_conf.md)
+  * [数据库访问](/sz_framework/database/)
+    * [数访问配置](/sz_framework/database/db_config.md)
   * [前后端分离](/sz_framework/front_and_backend.md)
     
+
