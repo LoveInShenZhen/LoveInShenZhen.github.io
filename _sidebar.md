@@ -7,7 +7,9 @@
     * [http 路由配置](/sz_framework/http_route.md)
     * [配置文件](/sz_framework/application_conf.md)
   * [数据库访问](/sz_framework/database/)
-    * [数访问配置](/sz_framework/database/db_config.md)
+    * [数据访问配置](/sz_framework/database/db_config.md)
+    * [数据库应用开发指南](/sz_framework/database/db_dev_guide.md)
   * [前后端分离](/sz_framework/front_and_backend.md)
     
+
 
