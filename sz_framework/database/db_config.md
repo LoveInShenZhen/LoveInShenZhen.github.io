@@ -81,14 +81,14 @@ ebean {
 
 ```json5
 ebean {
-  # The name of the default ebean datasource
+  // The name of the default ebean datasource
   defaultDatasource = "default"
   dataSources {
     default {
       ebeanModels = ["models.*"]
       jdbcUrl = "jdbc:mysql://MySqlServerName/DatabaseName?useSSL=false&useUnicode=true&characterEncoding=UTF-8"
       username = "root"
-      password = "Zh)D^dlf"
+      password = "passwd"
       connectionInitSql = "set names utf8mb4"
     }
   }
