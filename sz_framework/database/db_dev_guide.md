@@ -338,6 +338,7 @@ import sz.scaffold.controller.reply.ReplyBase
 import sz.scaffold.tools.BizLogicException
 
 
+@Comment("待办事项管理")
 class ToDoController : ApiController() {
 
     @Comment("新增一个待办事项")
@@ -385,3 +386,117 @@ POST    /api/v1/todolist/newToDo        com.api.server.controller.ToDoController
 ```
 
 * gradle run, 打开测试页面:[http://localhost:9000/api/builtin/doc/apiIndex](http://localhost:9000/api/builtin/doc/apiIndex) 进行测试, 查看数据库里是否新增对应的记录.
+
+#### API: 根据待办事项ID查询指定的代码事项
+* 定义接口需要用到的 Reply 类 **ToDoItemReply** 和其中包含的Bean class: **ToDoItem**, 代码如下
+* **src/main/kotlin/com/api/server/controller/reply/ToDoItem.kt**
+
+```kotlin
+package com.api.server.controller.reply
+
+import jodd.datetime.JDateTime
+import models.todolist.ToDoTask
+import sz.scaffold.annotations.Comment
+
+
+class ToDoItem {
+
+    @Comment("待办事项ID")
+    var id: Long = 0
+
+    @Comment("待办事项内容")
+    var task = ""
+
+    @Comment("待办事项优先级, 1-低, 2-普通, 3-高")
+    var priority = 0
+
+    @Comment("待办事项是否已完成")
+    var finished: Boolean = false
+
+    @Comment("待办事项完成时间")
+    var finish_time: JDateTime? = null
+
+    companion object {
+
+        fun buildFrom(todoTask: ToDoTask?): ToDoItem? {
+            if (todoTask != null) {
+                val item = ToDoItem()
+                item.id = todoTask.id
+                item.task = todoTask.task
+                item.priority = todoTask.priority
+                item.finished = todoTask.finished
+                item.finish_time = todoTask.finish_time
+
+                return item
+            } else {
+                return null
+            }
+        }
+    }
+}
+```
+
+* **src/main/kotlin/com/api/server/controller/reply/ToDoItemReply.kt**
+
+```kotlin
+package com.api.server.controller.reply
+
+import jodd.datetime.JDateTime
+import models.todolist.ToDoPriority
+import sz.scaffold.annotations.Comment
+import sz.scaffold.controller.reply.ReplyBase
+
+
+class ToDoItemReply : ReplyBase() {
+
+    @Comment("待办事项")
+    var item: ToDoItem? = null
+
+    override fun SampleData() {
+        item = ToDoItem()
+        item!!.id = 99
+        item!!.task = "改 bug: 9527"
+        item!!.priority = ToDoPriority.High.code
+        item!!.finished= true
+        item!!.finish_time = JDateTime("2019-01-01 23:52:26")
+    }
+}
+```
+
+* 在 **ToDoController** 里添加控制器方法: **fun byId(@Comment("待办事项ID") id: Long): ToDoItemReply**
+
+```kotlin
+    @Comment("根据待办事项ID查询指定的代码事项")
+    fun byId(@Comment("待办事项ID") id: Long): ToDoItemReply {
+        val reply = ToDoItemReply()
+
+        // 采用QueryBean的方式进行查询
+        val todoTask = ToDoTask.queryBean()
+            .id.eq(id)
+            .deleted.eq(false)
+            .findOne() ?: throw BizLogicException("待办事项(id: $id)不存在或者已经被标记删除")
+
+        // 采用Finder的方式进行查询
+//        val todoTask = ToDoTask.query().where()
+//            .eq("id", id)
+//            .eq("deleted", false)
+//            .findOne() ?: throw BizLogicException("待办事项(id: $id)不存在或者已经被标记删除")
+
+        reply.item = ToDoItem.buildFrom(todoTask)
+
+        return reply
+    }
+```
+
+* 添加一条API的方法路由
+```
+GET     /api/v1/todolist/byId       com.api.server.controller.ToDoController.byId
+```
+
+#### 其他Api接口
+* 其他几个api接口, 开发过程与上述2个接口的开发过程类似, 这里不细述了, 请参考完整示例代码
+* [待办事项完整Sample代码](https://github.com/LoveInShenZhen/ProjectTemplates/tree/master/samples/todolist)
+
+```bash
+svn export https://github.com/LoveInShenZhen/ProjectTemplates.git/trunk/samples/todolist todolist
+```
