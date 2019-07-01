@@ -9,7 +9,11 @@
   * [数据库访问](/sz_framework/database/)
     * [数据访问配置](/sz_framework/database/db_config.md)
     * [数据库应用开发指南](/sz_framework/database/db_dev_guide.md)
+  * [缓存](/sz_framework/cache/)
+    * [Redis缓存](/sz_framework/cache/redis_cache.md)
   * [前后端分离](/sz_framework/front_and_backend.md)
     
+
+
 
 
