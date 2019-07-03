@@ -85,7 +85,7 @@ redis {
 redis {
   default {
     workingMode = "STANDALONE"
-    host = "127.0.0.1"
+    host = "redis_server"
   }
 }
 ```

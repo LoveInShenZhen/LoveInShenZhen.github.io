@@ -8,39 +8,19 @@
   <meta name="description" content="Description">
   <meta name="viewport"
     content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
-  <link rel="stylesheet" href="/css/vue.css">
-  <link rel="stylesheet" href="/prism/prism.css">
+  <link rel="stylesheet" href="/css/theme-simple.css">
 
   <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.css">
   <script src="//cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
 </head>
 
 <style type="text/css">
-
-  .app-sub-sidebar {
-    width: 160px;
-    position: fixed;
-    top: 100px;
-    right: 50px;
-    font-size: xx-small;
-  }
-
-  .app-sub-sidebar::before {
-    position: absolute;
-    top: -35px;
-    left: 0;
-    width: 100%;
-    display: block;
-    margin-left: 15px;
-    content: '本文目录';
-    font-weight: bold;
-    font-size: xx-small;
-  }
-
-  .app-sub-sidebar li.active {
-    box-shadow: inset 8px -4px 0px -4px #52abff;
-    font-size: xx-small;
-  }
+/* Content
+============================================================================= */
+:root {
+  --content-max-width                 : 75em;
+  --sidebar-width                     : 25rem;
+}
 </style>
 
 <body>
@@ -96,20 +76,20 @@
   <!-- <script src="//unpkg.com/docsify/lib/docsify.min.js"></script> -->
   <script src="https://doc.open-uc.cn/lib/docsify.js"></script>
   <!-- 全文搜索 - Search -->
-  <script src="//unpkg.com/docsify/lib/plugins/search.js"></script>
+  <script src="/js/search.js"></script>
   <!-- 在所有的代码块上添加一个简单的Click to copy按钮来允许用户从你的文档中轻易地复制代码 -->
-  <script src="//unpkg.com/docsify-copy-code"></script>
+  <script src="/js/docsify-copy-code.min.js"></script>
   <!-- PlantUML plugin for docsify -->
-  <script src="//unpkg.com/docsify-plantuml/dist/docsify-plantuml.min.js"></script>
+  <script src="/js/docsify-plantuml.min.js"></script>
 
-  <script src="//unpkg.com/prismjs/components/prism-bash.min.js"></script>
-  <script src="//unpkg.com/prismjs/components/prism-java.min.js"></script>
-  <script src="//unpkg.com/prismjs/components/prism-javascript.min.js"></script>
-  <script src="//unpkg.com/prismjs/components/prism-json.min.js"></script>
-  <script src="//unpkg.com/prismjs/components/prism-json5.min.js"></script>
-  <script src="//unpkg.com/prismjs/components/prism-kotlin.min.js"></script>
-  <script src="//unpkg.com/prismjs/components/prism-sql.min.js"></script>
-  <script src="//unpkg.com/prismjs/components/prism-groovy.min.js"></script>
+  <script src="/js/prism-bash.min.js"></script>
+  <script src="/js/prism-java.min.js"></script>
+  <script src="/js/prism-javascript.min.js"></script>
+  <script src="/js/prism-json.min.js"></script>
+  <script src="/js/prism-json5.min.js"></script>
+  <script src="/js/prism-kotlin.min.js"></script>
+  <script src="/js/prism-sql.min.js"></script>
+  <script src="/js/prism-groovy.min.js"></script>
 
 </body>
 
