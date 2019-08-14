@@ -127,6 +127,7 @@ class SysInfo : ApiController() {
 > * * Http Method: 可以是 **GET**,**POST**,**HEAD**, (注:大写)
 > * * Http Path: http url中的path路径
 > * * 控制器类的全名 + 控制器方铭名称, 用 "**.**" 连接起来
+
 ```
 GET     /api/v1/sysinfo/memUsage        com.api.server.controller.sysinfo.SysInfo.memUsage
 ```

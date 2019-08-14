@@ -2,94 +2,113 @@
 <html lang="en">
 
 <head>
-  <meta charset="UTF-8">
-  <title>Document</title>
-  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
-  <meta name="description" content="Description">
-  <meta name="viewport"
-    content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
-  <link rel="stylesheet" href="/css/theme-simple.css">
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <meta name="description" content="Description">
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <!-- <link rel="stylesheet" href="/css/theme-simple.css"> -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/docsify-themeable@0/dist/css/theme-simple-dark.css">
 
-  <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.css">
-  <script src="//cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
+    <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.css">
+    <script src="//cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
+
 </head>
 
 <style type="text/css">
-/* Content
+    /* Content
 ============================================================================= */
-:root {
-  --content-max-width                 : 75em;
-  --sidebar-width                     : 25rem;
-}
+    
+     :root {
+        --content-max-width: 75em;
+        --sidebar-width: 25rem;
+    }
+    
+    .sidebar-nav>ul>li {
+        font-size: 1rem
+    }
+    
+    .sidebar-nav>ul>li a {
+        font-size: 100%
+    }
+    
+    .sidebar-nav>ul>li>ul li {
+        font-size: 90%
+    }
 </style>
 
 <body>
-  <div id="app"></div>
-  <script>
-    var num = 0;
-    mermaid.initialize({ startOnLoad: false });
+    <div id="app"></div>
+    <script>
+        var num = 0;
+        mermaid.initialize({
+            startOnLoad: false
+        });
 
-    window.$docsify = {
-      name: 'IT写轮眼',
-      repo: 'https://github.com/LoveInShenZhen/sz-vertx-kotlin',
-      loadSidebar: true,
-      alias: {
-        '/.*/_sidebar.md': '/_sidebar.md'
-      },
-      // autoHeader: true,
-      // maxLevel: 1,
-      subMaxLevel: 4,
-      auto2top: true,
-      plantuml: {
-        skin: 'classic',
-        serverPath: 'http://149.129.84.37:8080/svg/'
-      },
+        window.$docsify = {
+            name: 'IT写轮眼',
+            repo: 'https://github.com/LoveInShenZhen/sz-vertx-kotlin',
+            loadSidebar: true,
+            alias: {
+                '/.*/_sidebar.md': '/_sidebar.md'
+            },
+            // autoHeader: true,
+            // maxLevel: 1,
+            subMaxLevel: 4,
+            auto2top: true,
+            plantuml: {
+                skin: 'classic',
+                serverPath: 'http://149.129.84.37:8080/svg/'
+            },
 
-      // 完整配置参数
-      search: {
-        maxAge: 1800000, // 过期时间，单位毫秒
-        paths: 'auto',
-        placeholder: 'Type to search',
-        noData: 'No Results!',
-        // 搜索标题的最大程级, 1 - 6
-        depth: 6
-      },
+            // 完整配置参数
+            search: {
+                maxAge: 1800000, // 过期时间，单位毫秒
+                paths: 'auto',
+                placeholder: 'Type to search',
+                noData: 'No Results!',
+                // 搜索标题的最大程级, 1 - 6
+                depth: 6
+            },
 
-      markdown: {
-        renderer: {
-          code: function (code, lang) {
-            if (lang === "mermaid") {
-              return (
-                '<div class="mermaid">' + mermaid.render('mermaid-svg-' + num++, code) + "</div>"
-              );
+            markdown: {
+                renderer: {
+                    code: function(code, lang) {
+                        if (lang === "mermaid") {
+                            return (
+                                '<div class="mermaid">' + mermaid.render('mermaid-svg-' + num++, code) + "</div>"
+                            );
+                        }
+                        return this.origin.code.apply(this, arguments);
+                    }
+                }
             }
-            return this.origin.code.apply(this, arguments);
-          }
         }
-      }
-    }
-  </script>
-  <!-- CDN files for docsify-katex -->
-  <script src="//cdn.jsdelivr.net/npm/docsify-katex@latest/dist/docsify-katex.js"></script>
-  <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/katex@latest/dist/katex.min.css" />
+    </script>
+    <!-- CDN files for docsify-katex -->
+    <script src="//cdn.jsdelivr.net/npm/docsify-katex@latest/dist/docsify-katex.js"></script>
+    <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/katex@latest/dist/katex.min.css" />
 
-  <!-- <script src="//unpkg.com/docsify/lib/docsify.min.js"></script> -->
-  <script src="https://doc.open-uc.cn/lib/docsify.js"></script>
-  <!-- 全文搜索 - Search -->
-  <script src="/js/search.js"></script>
-  <!-- 在所有的代码块上添加一个简单的Click to copy按钮来允许用户从你的文档中轻易地复制代码 -->
-  <script src="/js/docsify-copy-code.min.js"></script>
-  <!-- PlantUML plugin for docsify -->
-  <script src="/js/docsify-plantuml.min.js"></script>
+    <!-- <script src="//unpkg.com/docsify/lib/docsify.min.js"></script> -->
+    <script src="https://doc.open-uc.cn/lib/docsify.js"></script>
 
-  <script src="/js/prism-bash.min.js"></script>
-  <script src="/js/prism-java.min.js"></script>
-  <script src="/js/prism-javascript.min.js"></script>
-  <script src="/js/prism-json.min.js"></script>
-  <script src="/js/prism-json5.min.js"></script>
-  <script src="/js/prism-kotlin.min.js"></script>
-  <script src="/js/prism-sql.min.js"></script>
-  <script src="/js/prism-groovy.min.js"></script>
+
+
+    <!-- 全文搜索 - Search -->
+    <script src="/js/search.js"></script>
+    <!-- 在所有的代码块上添加一个简单的Click to copy按钮来允许用户从你的文档中轻易地复制代码 -->
+    <script src="/js/docsify-copy-code.min.js"></script>
+    <!-- PlantUML plugin for docsify -->
+    <script src="/js/docsify-plantuml.min.js"></script>
+
+    <script src="/js/prism-bash.min.js"></script>
+    <script src="/js/prism-java.min.js"></script>
+    <script src="/js/prism-javascript.min.js"></script>
+    <script src="/js/prism-json.min.js"></script>
+    <script src="/js/prism-json5.min.js"></script>
+    <script src="/js/prism-kotlin.min.js"></script>
+    <script src="/js/prism-sql.min.js"></script>
+    <script src="/js/prism-groovy.min.js"></script>
 
 </body>
 
