@@ -15,7 +15,7 @@ ebean {
       ebeanModels = ["models.*"]
       jdbcUrl = "jdbc:mysql://localhost/api_test?useSSL=false&useUnicode=true&characterEncoding=UTF-8"
       username = "root"
-      password = "Zh)D^dlf"
+      password = "D2F!ql$hlB"
       // Set the SQL string that will be executed on all new connections when they are
       // created, before they are added to the pool.  If this query fails, it will be
       // treated as a failed connection attempt.
@@ -65,10 +65,6 @@ ebean {
       // Sets the maximum number of milliseconds that the pool will wait for a connection to be validated as
       // alive.
       validationTimeout = 5000
-
-      // 暂时被 @EbeanReadOnly 标注使用, 用于处理读写分离, 从多个dataSources中, 筛选出用于ReadOnly的dataSource
-      // 轮询处理. tags 为 list of string, eg: tags = ["readonly_1", "readonly_2", "readonly_3"]
-      tags = []
     }
   }
 }
@@ -86,7 +82,7 @@ ebean {
   dataSources {
     default {
       ebeanModels = ["models.*"]
-      jdbcUrl = "jdbc:mysql://MySqlServerName/DatabaseName?useSSL=false&useUnicode=true&characterEncoding=UTF-8"
+      jdbcUrl = "jdbc:mysql://MySqlIpOrName/DatabaseName?useSSL=false&useUnicode=true&characterEncoding=UTF-8"
       username = "root"
       password = "passwd"
       connectionInitSql = "set names utf8mb4"

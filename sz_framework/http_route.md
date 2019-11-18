@@ -20,16 +20,17 @@ GET     /api/some/api           com.api.server.controller.Sample.someApi    {"ar
 * 第3部分, 指定该路由是由哪个控制器类的哪个方法进行处理. 举例说明如下:
 > - **com.api.server.controller.Sample** 控制器类**Sample**的 FullName
 > - **hello** 是 **Sample** 这个控制器类中的一个方法, 用来处理http请求
-* 第4部分, 指定当http请求的**Query String**部分不包含某参数的时候, 该参数所使用的默认值. 格式为一个**Map&lt;String, String&gt;**的**单行的json格式的字符串**,其中 key 为参数名称, value 为参数的默认值
-> 举例说明, 有路由配置如下:
+* 第4部分, 指定当http请求的**Query String**部分不包含某参数的时候, 该参数所使用的默认值. 格式为一个 _**Map&lt;String, String&gt;**_ 的 _**单行 json 格式的字符串**_, 其中 key 为参数名称, value 为参数的默认值. 举例说明, 有路由配置如下:
 
 ```
-GET  /api/some/api  com.api.server.controller.Sample.someApi    {"arg1":"stringValue", "arg2":"true", "arg3"="100"}
+GET  /api/some/api  com.api.server.controller.Sample.someApi    {"arg1":"stringValueOfArg1", "arg2":"true", "arg3"="100"}
 
+# 3个参数的值都不指定, 则3个参数都采用指定的默认值
 http://localhost:9000/api/some/api
 等价于:
-http://localhost:9000/api/some/api?arg1=stringValue&arg2=true&arg3=100
+http://localhost:9000/api/some/api?arg1=stringValueOfArg1&arg2=true&arg3=100
 
+# 指定 arg1 和 arg3 的值, 但是不指定 arg2 的值, 则 arg2 会采用指定的默认值
 http://localhost:9000/api/some/api?arg1=anotherValue&arg3=999
 等价于:
 http://localhost:9000/api/some/api?arg1=anotherValue&arg2=true&arg3=999
@@ -52,6 +53,6 @@ http://localhost:9000/api/some/api?arg1=anotherValue&arg2=true&arg3=999
 | kotlin.Boolean       |
 | java.math.BigDecimal |
 
-> 如果要用到其他不支持的类型, 请以 **String** 的方式传递, 在控制器方法里实现相应的转换操作
+> 如果要用到其他不支持的类型, 请以 **String** 的方式传递, 然后在控制器方法里实现相应的类型转换操作
 
 
