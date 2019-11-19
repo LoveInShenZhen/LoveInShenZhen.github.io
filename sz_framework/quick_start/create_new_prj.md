@@ -21,27 +21,15 @@ svn export https://github.com/LoveInShenZhen/ProjectTemplates.git/trunk/vertx-we
 项目工程的目录结构如下, 具体的目录和配置文件的说明, 请阅读 _**ToDo**_ 文档.
 ```
 Hello
-├── build
-│   ├── generated
-│   │   └── source
-│   │       └── kaptKotlin
-│   │           ├── main
-│   │           └── test
-│   └── tmp
-│       └── kapt3
-│           ├── incrementalData
-│           │   ├── main
-│           │   └── test
-│           └── stubs
-│               ├── main
-│               └── test
 ├── build.gradle.kts
 ├── conf
 │   ├── application.conf
 │   ├── logback.xml
 │   ├── route
+│   ├── route.websocket
 │   ├── vertx-default-jul-logging.properties
-│   └── vertxOptions.json
+│   ├── vertxOptions.json
+│   └── zookeeper.json
 ├── gradle
 │   └── wrapper
 │       ├── gradle-wrapper.jar
@@ -56,16 +44,19 @@ Hello
         │   │   └── api
         │   │       └── server
         │   │           ├── ApiServer.kt
-        │   │           └── controller
-        │   │               ├── Sample.kt
-        │   │               └── reply
-        │   │                   └── HelloReply.kt
+        │   │           └── controllers
+        │   │               └── sample
+        │   │                   ├── SampleController.kt
+        │   │                   └── reply
+        │   │                       ├── HelloReply.kt
+        │   │                       └── UserListReply.kt
         │   └── models
-        │       └── User.kt
+        │       └── sample
+        │           └── User.kt
         └── resources
             └── ebean.mf
 
-27 directories, 16 files
+15 directories, 19 files
 ```
 
 ## 运行项目
@@ -78,18 +69,27 @@ gradle build
 # 运行项目
 gradle run
 ```
+![输出显示](../../img/vertx_web_simple_gradle_run.png)
+
+## 在浏览器中查看启动页面
+* 默认使用 9000 端口, 可以在 conf/application.conf 里进行配置
+* 点击 [http://localhost:9000](http://localhost:9000) 在浏览器中查看启动页面
+
+![启动页面](../../img/index_page.png)
 
 ## 查看自动生成的API接口测试页面
-* 默认使用 9000 端口, 可以在 conf/application.conf 里进行配置
-* 点击 [http://localhost:9000/api/builtin/doc/apiIndex](http://localhost:9000/api/builtin/doc/apiIndex) 查看自动生成的APi测试页面
+* 点击 **[api 列表](http://localhost:9000/api/builtin/doc/apiIndex)** 查看自动生成的APi测试页面
 
 * API接口文档列表页面
-> ![API接口文档列表页面](../../img/apiIndex_page.png)
 
-* API接口测试页面, 填入参数, 点击**测试**按钮
-> ![API接口测试页面](../../img/api_sample_hello.png)
+![API接口文档列表页面](../../img/apiIndex_page.png)
+
+* API接口测试页面, 填入参数, 点击 **测试** 按钮
+
+![API接口测试页面](../../img/api_sample_hello.png)
 
 ## 查看自动生成的API接口文档
-* 点击 [http://localhost:9000/api/builtin/doc/apiDocHtml](http://localhost:9000/api/builtin/doc/apiDocHtml) 查看自动生成的API接口文档
+* 点击 **[api 文档的html格式](http://localhost:9000/api/builtin/doc/apiDocHtml)** 查看自动生成的API接口文档
 * API接口文档页面
-> ![API接口文档页面](../../img/api_doc_page.png)
+
+![API接口文档页面](../../img/api_doc_page.png)

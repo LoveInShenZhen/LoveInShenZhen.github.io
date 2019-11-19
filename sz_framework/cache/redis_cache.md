@@ -92,9 +92,9 @@ redis {
 
 ### 代码示例
 ```kotlin
-package com.api.server.controller
+package com.api.server.controllers
 
-import com.api.server.controller.reply.HelloReply
+import com.api.server.controllers.reply.HelloReply
 import sz.scaffold.annotations.Comment
 import sz.scaffold.cache.redis.RedisCacheApi
 import sz.scaffold.controller.ApiController

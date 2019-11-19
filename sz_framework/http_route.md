@@ -9,8 +9,8 @@
 
 ```
 # 测试接口
-GET     /api/sample/hello       com.api.server.controller.Sample.hello
-GET     /api/some/api           com.api.server.controller.Sample.someApi    {"arg1":"stringValue", "arg2":"true", "arg3"="100"}
+GET     /api/sample/hello       com.api.server.controllers.Sample.hello
+GET     /api/some/api           com.api.server.controllers.Sample.someApi    {"arg1":"stringValue", "arg2":"true", "arg3"="100"}
 
 
 ```
@@ -18,12 +18,12 @@ GET     /api/some/api           com.api.server.controller.Sample.someApi    {"ar
 * 第1部分, 指定该路由响应的 **[http method](https://developer.mozilla.org/en-US/docs/Web/HTTP/Methods)**, 框架支持: **GET**, **POST**, **HEAD** 三种, **要求大写**
 * 第2部分, 指定该路由响应的 Http 请求的路径(Path)
 * 第3部分, 指定该路由是由哪个控制器类的哪个方法进行处理. 举例说明如下:
-> - **com.api.server.controller.Sample** 控制器类**Sample**的 FullName
+> - **com.api.server.controllers.Sample** 控制器类**Sample**的 FullName
 > - **hello** 是 **Sample** 这个控制器类中的一个方法, 用来处理http请求
 * 第4部分, 指定当http请求的**Query String**部分不包含某参数的时候, 该参数所使用的默认值. 格式为一个 _**Map&lt;String, String&gt;**_ 的 _**单行 json 格式的字符串**_, 其中 key 为参数名称, value 为参数的默认值. 举例说明, 有路由配置如下:
 
 ```
-GET  /api/some/api  com.api.server.controller.Sample.someApi    {"arg1":"stringValueOfArg1", "arg2":"true", "arg3"="100"}
+GET  /api/some/api  com.api.server.controllers.Sample.someApi    {"arg1":"stringValueOfArg1", "arg2":"true", "arg3"="100"}
 
 # 3个参数的值都不指定, 则3个参数都采用指定的默认值
 http://localhost:9000/api/some/api

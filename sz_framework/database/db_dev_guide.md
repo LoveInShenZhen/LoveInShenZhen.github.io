@@ -291,12 +291,12 @@ alter table `to_do_task` convert to character set utf8mb4;
 ### 实现ToDoList的增删查改的API接口
 
 #### API: 新增一个待办事项
-* 在 **com.api.server.controller** 下新增一个名称为 **post** 的package, 我们在这个包里面, 存放用于 **Post Form** 和 **Post Json** 时, 用来转换提交的数据    的 DTO 类
-* 在 **com.api.server.controller.post** 包下, 新增DTO类: **PostToDo**
+* 在 **com.api.server.controllers** 下新增一个名称为 **post** 的package, 我们在这个包里面, 存放用于 **Post Form** 和 **Post Json** 时, 用来转换提交的数据    的 DTO 类
+* 在 **com.api.server.controllers.post** 包下, 新增DTO类: **PostToDo**
 * 注意: 在属性字段的上面, 添加 **@Comment** 标注, 记录字段的注释
 
 ```kotlin
-package com.api.server.controller.post
+package com.api.server.controllers.post
 
 import models.todolist.ToDoPriority
 import sz.scaffold.annotations.Comment
@@ -321,13 +321,13 @@ class PostToDo {
 }
 ```
 
-* 在 **com.api.server.controller** 包下面新增一个控制器类: **ToDoController**
+* 在 **com.api.server.controllers** 包下面新增一个控制器类: **ToDoController**
 * 在 **ToDoController** 新增一个 **fun newToDo() : ReplyBase** 的控制器方法, 该方法实现新增一个代码事项的业务逻辑.
 
 ```kotlin
-package com.api.server.controller
+package com.api.server.controllers
 
-import com.api.server.controller.post.PostToDo
+import com.api.server.controllers.post.PostToDo
 import models.todolist.ToDoPriority
 import models.todolist.ToDoTask
 import sz.interceptors.EbeanTransaction
@@ -382,7 +382,7 @@ class ToDoController : ApiController() {
 
 ```
 # 待办事项
-POST    /api/v1/todolist/newToDo        com.api.server.controller.ToDoController.newToDo
+POST    /api/v1/todolist/newToDo        com.api.server.controllers.ToDoController.newToDo
 ```
 
 * gradle run, 打开测试页面:[http://localhost:9000/api/builtin/doc/apiIndex](http://localhost:9000/api/builtin/doc/apiIndex) 进行测试, 查看数据库里是否新增对应的记录.
@@ -392,7 +392,7 @@ POST    /api/v1/todolist/newToDo        com.api.server.controller.ToDoController
 * **src/main/kotlin/com/api/server/controller/reply/ToDoItem.kt**
 
 ```kotlin
-package com.api.server.controller.reply
+package com.api.server.controllers.reply
 
 import jodd.datetime.JDateTime
 import models.todolist.ToDoTask
@@ -439,7 +439,7 @@ class ToDoItem {
 * **src/main/kotlin/com/api/server/controller/reply/ToDoItemReply.kt**
 
 ```kotlin
-package com.api.server.controller.reply
+package com.api.server.controllers.reply
 
 import jodd.datetime.JDateTime
 import models.todolist.ToDoPriority
@@ -490,7 +490,7 @@ class ToDoItemReply : ReplyBase() {
 
 * 添加一条API的方法路由
 ```
-GET     /api/v1/todolist/byId       com.api.server.controller.ToDoController.byId
+GET     /api/v1/todolist/byId       com.api.server.controllers.ToDoController.byId
 ```
 
 #### 其他Api接口
