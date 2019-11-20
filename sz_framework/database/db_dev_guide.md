@@ -22,7 +22,7 @@ svn export https://github.com/LoveInShenZhen/ProjectTemplates.git/trunk/vertx-we
 * 删除工程模板里自带的样板实体类文件: **src/main/kotlin/models/sample/User.kt**
 
 ### 配置数据库
-* 参考 [数据库访问配置](/sz_framework/database/db_config.md)
+* 参考 [数据库访问配置](sz_framework/database/db_config.md)
 * 根据你本地的MySql环境,修改数据库配置:
 
 ```json5
