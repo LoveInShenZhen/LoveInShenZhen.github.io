@@ -19,11 +19,11 @@ create database todolist default character set utf8mb4 collate utf8mb4_unicode_c
 svn export https://github.com/LoveInShenZhen/ProjectTemplates.git/trunk/vertx-web-simple todolist
 ```
 
-* 删除工程模板里自带的样板实体类文件: **src/main/kotlin/models/User.kt**
+* 删除工程模板里自带的样板实体类文件: **src/main/kotlin/models/sample/User.kt**
 
 ### 配置数据库
 * 参考 [数据库访问配置](/sz_framework/database/db_config.md)
-* 修改数据库配置如下:
+* 根据你本地的MySql环境,修改数据库配置:
 
 ```json5
 ebean {
@@ -35,7 +35,6 @@ ebean {
       jdbcUrl = "jdbc:mysql://localhost/todolist?useSSL=false&useUnicode=true&characterEncoding=UTF-8"
       username = "root"
       password = "justdoit"
-      connectionInitSql = "set names utf8mb4"
     }
   }
 }
@@ -48,22 +47,24 @@ ebean {
 ```kotlin
 package models.todolist
 
+
 import io.ebean.Finder
+import io.ebean.Model
 import io.ebean.Query
 import io.ebean.annotation.WhenCreated
 import io.ebean.annotation.WhenModified
 import jodd.datetime.JDateTime
 import models.todolist.query.QToDoTask
-import sz.DB
-import sz.EntityBean.BaseModel
+import sz.ebean.DB
 import java.sql.Timestamp
 import javax.persistence.Column
 import javax.persistence.Entity
 import javax.persistence.Id
 import javax.persistence.Version
 
+@Suppress("MemberVisibilityCanBePrivate", "PropertyName")
 @Entity
-class ToDoTask : BaseModel() {
+class ToDoTask(dataSource: String = "") : Model(dataSource) {
 
     @Id
     var id: Long = 0
@@ -92,7 +93,7 @@ class ToDoTask : BaseModel() {
     @Column(columnDefinition = "TINYINT(1) COMMENT '标记删除'")
     var deleted: Boolean = false
 
-    fun markFinished(newStatus:Boolean) {
+    fun markFinished(newStatus: Boolean) {
         if (finished != newStatus) {
             if (newStatus) {
                 // 未完成 ==> 完成
@@ -109,7 +110,7 @@ class ToDoTask : BaseModel() {
     companion object {
 
         fun finder(dsName: String = DB.currentDataSource()): Finder<Long, ToDoTask> {
-            return finder<Long, ToDoTask>(dsName)
+            return DB.finder(dsName)
         }
 
         fun query(dsName: String = DB.currentDataSource()): Query<ToDoTask> {
@@ -121,11 +122,10 @@ class ToDoTask : BaseModel() {
         }
     }
 }
-
 ```
 
 * 注意 **priority** 字段,(类似一个状态码) 需要定义一个 _描述任务优先级的_ **枚举类**
-* 创建 **ToDoPriority** 枚举类, 文件: src/main/kotlin/models/todolist/ToDoTask.kt
+* 创建 **ToDoPriority** 枚举类, 文件: src/main/kotlin/models/todolist/ToDoPriority.kt
 
 ```kotlin
 package models.todolist
@@ -151,15 +151,16 @@ enum class ToDoPriority(val code: Int, val desc: String) {
 ```
 
 #### 数据库实体类要点
-* 继承自类: **sz.EntityBean.BaseModel**
+* 继承自类: **io.ebean.Model**
+* 构造函数, 指定实体对应的 **dataSource** 数据源, 参见: [数据库访问配置](/sz_framework/database/db_config.md), 并将此参数传递给基类 **Model** 的构造函数
 * 类名称上面添加标注: **@Entity**, 表示该类为一个数据库的实体类, 他与数据库中的一张表对应
 * 类名称的命名风格为: **UpperCamelCase** (即每个单词首字母为大写, 单词之间以大小写分隔, 第一个字母为大写) 按照该风格定义的实体类, 将会自动与数据库中的一张表对应, 表名称风格为 **lowercase_with_underscores** (即全部为小写字母, 单词之间以下划线分隔). 例如: ToDoTask 实体类对应的数据库表为 to_do_task
-* 可以在实体类名称上面, 添加标注 **@Table** 来自定义表名称, 例如: 将表名称指定为 **todo_list**
+* 可以在实体类名称上面, 添加标注 **@Table** 来自定义表名称, 例如: 将表名称指定为 **todo_task**
 
 ```kotlin
 @Entity
-@Table(name = "todo_list")
-class ToDoTask : BaseModel() {
+@Table(name = "todo_task")
+class ToDoTask(dataSource: String = "") : Model(dataSource) {
 
     @Id
     var id: Long = 0
@@ -196,7 +197,7 @@ class ToDoTask : BaseModel() {
     companion object {
 
         fun finder(dsName: String = DB.currentDataSource()): Finder<Long, ToDoTask> {
-            return finder<Long, ToDoTask>(dsName)
+            return DB.finder(dsName)
         }
 
         fun query(dsName: String = DB.currentDataSource()): Query<ToDoTask> {
@@ -213,49 +214,107 @@ class ToDoTask : BaseModel() {
 * 为了便于编码, 下面提供了用于 IntelliJ 的 [Live Templates](https://www.jetbrains.com/help/idea/using-live-templates.html) 代码片段(code snippets)
 
 ```
-companion object {
+import io.ebean.Finder
+import io.ebean.Model
+import io.ebean.Query
+import io.ebean.annotation.WhenCreated
+import io.ebean.annotation.WhenModified
+import jodd.datetime.JDateTime
+import sz.ebean.DB
+import java.sql.Timestamp
+import javax.persistence.Column
+import javax.persistence.Entity
+import javax.persistence.Id
+import javax.persistence.Version
 
-    fun finder(dsName: String = DB.currentDataSource()) : Finder<Long, $EntityClass$> {
-        return finder<Long, $EntityClass$>(dsName)
-    }
+@Suppress("MemberVisibilityCanBePrivate")
+@Entity
+class $EntityClass$ : Model() {
 
-    fun query(dsName: String = DB.currentDataSource()): Query<$EntityClass$> {
-        return finder(dsName).query()
-    }
+    @Id
+    var id: Long? = null
 
-    fun queryBean(dsName: String = DB.currentDataSource()): Q$EntityClass$ {
-        return Q$EntityClass$(DB.byDataSource(dsName))
+    @Version
+    var version: Long? = null
+
+    @WhenCreated
+    var whenCreated: Timestamp? = null
+
+    @WhenModified
+    var whenModified: Timestamp? = null
+
+    // todo: 1. add db field here
+    // todo: 2. gradle kaptKotlin  #run this command to generate query bean source code
+    // todo: 3. fix import issue of query bean
+    $END$
+
+    companion object {
+    
+        fun finder(dsName: String = DB.currentDataSource()) : Finder<Long, $EntityClass$> {
+            return DB.finder(dsName)
+        }
+    
+        fun query(dsName: String = DB.currentDataSource()): Query<$EntityClass$> {
+            return finder(dsName).query()
+        }
+    
+        fun queryBean(dsName: String = DB.currentDataSource()): Q$EntityClass$ {
+            return Q$EntityClass$(DB.byDataSource(dsName))
+        }
     }
 }
-$END$
 ```
 
 * 关于 Finder 和 QueryBean 的用法, 请参考 EBean 的文档[EBean/Query](https://ebean.io/docs/query/),  建议查看一下 Finder 的源代码了解一下细节
 * QueryBean 是gradle里的kapt插件, 根据定义的实体类自动生成的.  
-> * 在执行了 gradle build 命令后生成
-> * 生成代码路径: build/generated/source/kaptKotlin/main/
-> * 对应在 build.gradle.kts 里的配置如下
+    * 在执行了 gradle kaptKotlin 命令后生成
+    * 生成代码路径: build/generated/source/kaptKotlin/main/
+    * 定义完数据库实体类后, 首次编译, 需要手工执行 gradle kaptKotlin 生成 QueryBean 代码, 然后就可以在实体类补全对应 QueryBean 的 import. 以后每次构建的时候, gradle build 任务会自动调用 gradle kaptKotlin
+    * 对应在 build.gradle.kts 里的配置如下
+* 我们也可以完全不使用 QueryBean 这一个功能. 只需要在 build.gradle.kts 去掉如下的 2 句指令:
+    * kotlin("kapt").version("1.3.50")
+    * kapt("io.ebean:kotlin-querybean-generator:12.1.1")
 
 ```groovy
-buildscript {
-    dependencies {
-        classpath("gradle.plugin.io.ebean:ebean-gradle-plugin:11.36.1")
-    }
-}
-
 plugins {
     // Apply the Kotlin JVM plugin to add support for Kotlin on the JVM.
-    id("org.jetbrains.kotlin.jvm").version("1.3.31")
+    id("org.jetbrains.kotlin.jvm").version("1.3.50")
 
-    id("io.ebean").version("11.36.1")
-    kotlin("kapt") version "1.3.31"
+    // Apply the application plugin to add support for building a CLI application.
+    application
+
+    id("io.ebean").version("12.1.1")
+    kotlin("kapt").version("1.3.50")
+}
+
+dependencies {
+    // Use the Kotlin JDK 8 standard library.
+    implementation(kotlin("stdlib-jdk8"))
+    implementation(kotlin("reflect"))
+    
+    implementation(files("conf"))
+    implementation("com.github.kklongming:sz-scaffold:3.0.0-latest")
+    implementation("com.github.kklongming:sz-ebean:3.0.0-latest")
+    implementation("com.github.kklongming:sz-api-doc:3.0.0-latest")
+
+    // 注释了下面这句, 则不会产生 gradle kaptKotlin 任务, 不会生成实体类对应的QueryBean
+    kapt("io.ebean:kotlin-querybean-generator:12.1.1")
+
+    // Use the Kotlin test library.
+    testImplementation("org.jetbrains.kotlin:kotlin-test")
+
+    // Use the Kotlin JUnit integration.
+    testImplementation("org.jetbrains.kotlin:kotlin-test-junit")
+
+    configurations.all {
+        this.exclude(group = "org.slf4j", module = "slf4j-log4j12")
+    }
 }
 
 ebean {
     debugLevel = 2
     queryBeans = true
     kotlin = true
-    generatorVersion = "11.4"
 }
 ```
 
@@ -280,10 +339,6 @@ create table to_do_task (
   constraint pk_to_do_task primary key (id)
 );
 
-
-
-# 修改表的默认字符集和所有列的字符集为 utf8mb4
-alter table `to_do_task` convert to character set utf8mb4;
 ```
 
 * 在 **MySql** 上执行上面的脚本, 创建数据库表
@@ -291,12 +346,12 @@ alter table `to_do_task` convert to character set utf8mb4;
 ### 实现ToDoList的增删查改的API接口
 
 #### API: 新增一个待办事项
-* 在 **com.api.server.controllers** 下新增一个名称为 **post** 的package, 我们在这个包里面, 存放用于 **Post Form** 和 **Post Json** 时, 用来转换提交的数据    的 DTO 类
-* 在 **com.api.server.controllers.post** 包下, 新增DTO类: **PostToDo**
+* 在 **com.api.server.controllers.todolist** 下新增一个名称为 **post** 的package, 我们在这个包里面, 存放用于 **Post Form** 和 **Post Json** 时, 用来转换提交的数据的 DTO 类
+* 在 **com.api.server.controllers.todolist.post** 包下, 新增DTO类: **PostToDo**
 * 注意: 在属性字段的上面, 添加 **@Comment** 标注, 记录字段的注释
 
 ```kotlin
-package com.api.server.controllers.post
+package com.api.server.controllers.todolist.post
 
 import models.todolist.ToDoPriority
 import sz.scaffold.annotations.Comment
@@ -321,13 +376,13 @@ class PostToDo {
 }
 ```
 
-* 在 **com.api.server.controllers** 包下面新增一个控制器类: **ToDoController**
+* 在 **com.api.server.controllers.todolist** 包下面新增一个控制器类: **ToDoController**
 * 在 **ToDoController** 新增一个 **fun newToDo() : ReplyBase** 的控制器方法, 该方法实现新增一个代码事项的业务逻辑.
 
 ```kotlin
-package com.api.server.controllers
+package com.api.server.controllers.todolist
 
-import com.api.server.controllers.post.PostToDo
+import com.api.server.controllers.todolist.post.PostToDo
 import models.todolist.ToDoPriority
 import models.todolist.ToDoTask
 import sz.interceptors.EbeanTransaction
@@ -389,10 +444,10 @@ POST    /api/v1/todolist/newToDo        com.api.server.controllers.ToDoControlle
 
 #### API: 根据待办事项ID查询指定的代码事项
 * 定义接口需要用到的 Reply 类 **ToDoItemReply** 和其中包含的Bean class: **ToDoItem**, 代码如下
-* **src/main/kotlin/com/api/server/controller/reply/ToDoItem.kt**
+* **src/main/kotlin/com/api/server/controllers/todolist/reply/ToDoItem.kt**
 
 ```kotlin
-package com.api.server.controllers.reply
+package com.api.server.controllers.todolist.reply
 
 import jodd.datetime.JDateTime
 import models.todolist.ToDoTask
@@ -436,17 +491,19 @@ class ToDoItem {
 }
 ```
 
-* **src/main/kotlin/com/api/server/controller/reply/ToDoItemReply.kt**
+* **src/main/kotlin/com/api/server/controllers/todolist/reply/ToDoItemReply.kt**
 
 ```kotlin
-package com.api.server.controllers.reply
+package com.api.server.controllers.todolist.reply
 
 import jodd.datetime.JDateTime
 import models.todolist.ToDoPriority
 import sz.scaffold.annotations.Comment
 import sz.scaffold.controller.reply.ReplyBase
 
-
+//
+// Created by kk on 2019-06-05.
+//
 class ToDoItemReply : ReplyBase() {
 
     @Comment("待办事项")
@@ -490,7 +547,7 @@ class ToDoItemReply : ReplyBase() {
 
 * 添加一条API的方法路由
 ```
-GET     /api/v1/todolist/byId       com.api.server.controllers.ToDoController.byId
+GET     /api/v1/todolist/byId                                           com.api.server.controllers.todolist.ToDoController.byId
 ```
 
 #### 其他Api接口

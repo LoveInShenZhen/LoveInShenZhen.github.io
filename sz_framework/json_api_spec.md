@@ -7,8 +7,8 @@
 ### Request-Response 形式
 * **Http Request**, 支持 **GET**, **POST**, **HEAD** 这三种方式
 
-> - 因为 **阿里云的负载均衡服务** 是通过 **HEAD** 方法对后端进行健康检查的, 所以框架对 HEAD 予以支持
-> - 通常API接口, 采用 **GET** 或者 **POST** 即可
+    > - 因为 **阿里云的负载均衡服务** 是通过 **HEAD** 方法对后端进行健康检查的, 所以框架对 HEAD 予以支持
+    > - 通常API接口, 采用 **GET** 或者 **POST** 即可
 
 * Response 返回一个Json文本
 * Response 的 **Content-Type** : **application/json; charset=utf-8**
@@ -23,14 +23,15 @@
 }
 ```
 
-> - **ret** : 0 表示成功, 其他值表示错误码, 由开发人员自己定义. 
-> - **errmsg** : 当ret=0时, 返回OK, 非0时, 返回错误描述信息. 例如: token超时; 违背某某业务规则; 某某参数为空 等等
-> - 这2个基础字段, 是从 **ReplyBase** 类继承而来的. 
-> - web前端程序, 应当首先对调用返回的 **ret** 值进行判断, 如果不为 0 则需要进行相应的错误处理
+    > - **ret** : 0 表示成功, 其他值表示错误码, 由开发人员自己定义. 
+    > - **errmsg** : 当ret=0时, 返回OK, 非0时, 返回错误描述信息. 例如: token超时; 违背某某业务规则; 某某参数为空 等等
+    > - 这2个基础字段, 是从 **ReplyBase** 类继承而来的. 
+    > - web前端程序, 应当首先对调用返回的 **ret** 值进行判断, 如果不为 0 则需要进行相应的错误处理
 
 
 ### 字符编码要求 utf-8
 * Request 和 Response 的字符编码要求是: charset=utf-8
+* **Content-Type** : **application/json; charset=utf-8**
 
 ### api参数传递方式
 * 每个api请求(http request), 会根据route配置, 指定对应的控制器类(实例)的某个方法去处理
