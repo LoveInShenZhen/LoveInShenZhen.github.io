@@ -8,7 +8,7 @@
 
 ### 配置文件读取所使用的java库
 * [Typesafe Config](https://lightbend.github.io/config/) 
-* [github 站点](https://github.com/lightbend/config)
+* [Typesafe lightbend/config github 站点](https://github.com/lightbend/config)
 * [Java doc](https://lightbend.github.io/config/latest/api/)
 
 ### 在sz框架里面读取配置

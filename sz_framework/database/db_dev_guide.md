@@ -167,7 +167,7 @@ class ToDoTask(dataSource: String = "") : Model(dataSource) {
 }
 ```
 
-* 注意, 实体类起名的时候, 不要与mysql的关键字冲突, 避免以后在写sql查询的时候, 对这些有关键字冲突的名称进行转义
+* 注意, 实体类和属性字段起名的时候, 不要与mysql的关键字冲突, 避免以后在写sql查询的时候, 对这些有关键字冲突的名称进行转义
 * 每个实体类我们都会增加如下的字段,(建议, 非强制), 其中 **id** 为表的**主键**. 后面的 **version**, **whenCreated**, **whenModified**, EBean 框架会用来进行乐观锁的逻辑处理
 
 ```kotlin
