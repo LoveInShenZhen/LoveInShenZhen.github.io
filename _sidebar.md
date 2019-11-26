@@ -11,6 +11,7 @@
     * [数据库应用开发指南](sz_framework/database/db_dev_guide.md)
   * [缓存](sz_framework/cache/)
     * [Redis缓存](sz_framework/cache/redis_cache.md)
+  * [websocket](sz_framework/websocket/websocket_sample.md)
   * [前后端分离](sz_framework/front_and_backend.md)
 * [经验之谈](best_practice/)
     
