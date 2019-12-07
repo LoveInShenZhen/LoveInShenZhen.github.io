@@ -21,7 +21,7 @@ ebean {
     default {
       jdbcUrl = "jdbc:mysql://localhost/api_test?useSSL=false&useUnicode=true&characterEncoding=UTF-8"
       username = "root"
-      password = "D2F!ql$hlB"
+      password = "change_your_password"
       // Set the SQL string that will be executed on all new connections when they are
       // created, before they are added to the pool.  If this query fails, it will be
       // treated as a failed connection attempt.
@@ -91,8 +91,7 @@ ebean {
     default {
       jdbcUrl = "jdbc:mysql://MySqlIpOrName/DatabaseName?useSSL=false&useUnicode=true&characterEncoding=UTF-8"
       username = "root"
-      password = "passwd"
-      connectionInitSql = "set names utf8mb4"
+      password = "change_your_password"
     }
   }
 }
