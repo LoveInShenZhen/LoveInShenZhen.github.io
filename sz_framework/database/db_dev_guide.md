@@ -25,11 +25,12 @@ svn export https://github.com/LoveInShenZhen/ProjectTemplates.git/trunk/vertx-we
 
 ```json5
 ebean {
-  // The name of the default ebean datasource
+  //The name of the default ebean datasource
   defaultDatasource = "default"
+  ebeanModels = ["models.*"]
+
   dataSources {
     default {
-      ebeanModels = ["models.*"]
       jdbcUrl = "jdbc:mysql://localhost/todolist?useSSL=false&useUnicode=true&characterEncoding=UTF-8"
       username = "root"
       password = "justdoit"
