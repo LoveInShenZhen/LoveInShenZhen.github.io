@@ -1,4 +1,4 @@
-* [sz 后端开发框架](sz_framework/introduction.md)
+* [SZ 后端快速开发框架](sz_framework/introduction.md)
   * [简介](sz_framework/introduction.md)
   * [快速入门](sz_framework/quick_start/)
     * [新建项目](sz_framework/quick_start/create_new_prj.md)
