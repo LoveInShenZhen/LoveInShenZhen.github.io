@@ -150,6 +150,14 @@ enum class ToDoPriority(val code: Int, val desc: String) {
 ```
 
 #### 数据库实体类要点
+* 数据库实体类, 默认约定放在 **models** 或其子package下. 因为 EBean 框架需要进行注册实体类的操作, sz 框架在根据配置文件进行EBean初始化的时候, 默认是扫描 __models.\*__ 包(及其子包) 下的数据库实体类. 对应在 application.conf 里的配置如下, 如果实体类需要放在其他自定义的包下, 请相应修配置, 添加需要扫描的包路径, __(注: package_name.* 表示递归扫描包 package_name 及其子包下的实体类)__ 例如:
+
+```json5
+ebean {
+  ebeanModels = ["models.*", "your.db.entity.*"]
+}
+```
+
 * 继承自类: **io.ebean.Model**
 * 构造函数, 指定实体对应的 **dataSource** 数据源, 参见: [数据库访问配置](/sz_framework/database/db_config.md), 并将此参数传递给基类 **Model** 的构造函数
 * 类名称上面添加标注: **@Entity**, 表示该类为一个数据库的实体类, 他与数据库中的一张表对应
@@ -212,7 +220,7 @@ class ToDoTask(dataSource: String = "") : Model(dataSource) {
 
 * 为了便于编码, 下面提供了用于 IntelliJ 的 [Live Templates](https://www.jetbrains.com/help/idea/using-live-templates.html) 代码片段(code snippets)
 
-```
+```kotlin
 import io.ebean.Finder
 import io.ebean.Model
 import io.ebean.Query
@@ -319,6 +327,7 @@ ebean {
 
 ### 生成数据库表
 * 编译构建, 运行
+
 ```bash
 gradle run
 ```
@@ -545,6 +554,7 @@ class ToDoItemReply : ReplyBase() {
 ```
 
 * 添加一条API的方法路由
+
 ```
 GET     /api/v1/todolist/byId                                           com.api.server.controllers.todolist.ToDoController.byId
 ```
