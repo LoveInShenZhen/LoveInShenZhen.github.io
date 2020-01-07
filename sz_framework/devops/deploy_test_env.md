@@ -10,6 +10,8 @@
 * 包含一个 Docker 的数据卷
 * 容器内提供 Nginx 服务, 并且可以通过ssh (sftp/rsync) 的方式, 部署和更新静态页面和nginx配置文件
 * 包含一个 Zookeeper 的容器, 提供集群功能
+* 通过 Docker Compose file 裁剪不需要的容器
+* 容器所使用的镜像和自行构建的镜像所使用的基础镜像, 都必须是docker hub 上标记为 **Official Images** 或 **VERIFIED PUBLISHER**
 
 ## 本文所描述的部署方式的限制
 * 本文描述的部署方式仅限在单机上, 多机器部署, 需要先创建 docker 集群.
@@ -51,14 +53,127 @@ sudo systemctl restart docker
 
 #### ubuntu 下 docker 一键安装配置脚本
 为了简化操作, 提供了docker的安装配置脚本
+```bash
+curl -fsSL https://loveinshenzhen.github.io/resources/install_docer_for_ubuntu.sh | sudo sh
+```
 
-#### 获取测试环境的 Docker Compose file
+#### 准备测试环境的 Docker Compose file
+* 一套分布式的应用系统, 是由多个不同的服务组成
+* sz 后端分布式应用, 按照提供的服务类型, 一般由以下几个部分组成 (_注:不一定全部都包含_)
+    * MySql (*注: 测试环境, MySql 由一个mysql容器提供服务, 正式站点, 通常使用云服务商提供的云数据库服务*)
+    * Redis (*注: 如果仅作为缓存来使用,可靠性没有要求的那么高, 能够快速恢复就行, 所以通常redis使用容器方式提供服务, 正式站点,也是可以选择使用云服务商提供的redis云服务, 或者自行搭建redis 的高可用+负载均衡*)
+    * Zookeeper (*注: sz框架下, 我们选择使用 zookeeper 来搭建Vert.x集群*)
+    * 然后是使用sz框架开发的应用服务, 按照业务功能,提供不同服务,例如 json api server, gRpc server, async/Plan task server 等等
+    * 消息队列服务: RabbitMQ/RocketMQ/(阿里云/腾讯云/华为云版的消息队列服务,等待开发实现)
 
-##### sz 后端应用的通常组成
-sz 后端分布式应用, 按照提供的服务类型, 一般由以下几个部分组成 (_注:不一定全部都包含_)
-* MySql (*注: 测试环境, MySql 由一个mysql容器提供服务, 正式站点, 通常使用云服务商提供的云数据库服务*)
-* Redis (*注: 如果仅作为缓存来使用,可靠性没有要求的那么高, 能够快速恢复就行, 所以通常redis使用容器方式提供服务, 正式站点,也是可以选择使用云服务商提供的redis云服务, 或者自行搭建redis 的高可用+负载均衡*)
-* Zookeeper (*注: sz框架下, 我们选择使用 zookeeper 来搭建Vert.x集群*)
-* 然后是使用sz框架开发的应用服务, 按照业务功能,提供不同服务,例如 json api server, gRpc server, async/Plan task server 等等
-* 消息队列服务: RabbitMQ/RocketMQ/(阿里云版,稍后支持)
+下面, 我们按照上面的组成部分, 构建 Docker Compose file
+```yaml
+version: "3.7"
+services:
+  # 一般的业务系统, 都会依赖于一个数据库服务, 所以就默认提供
+  sz_mysql:
+    image: mysql:5.7
+    environment: 
+      # 创建MySql实例的时候, 设置的 root 用户密码, 根据需要自己修改
+      MYSQL_ROOT_PASSWORD: 1qaz2wsx
+    restart: always
+    volumes: 
+      - type: volume
+        source: sz-mysql-data
+        target: /var/lib/mysql
+    networks: 
+      - sz-dev-test
+    ports: 
+      # 暴露 MySql 的端口, 便于开发调试, 用户数据库管理工具管理数据
+      - "3306:3306"
+  
+  # 内置一个MySql的web管理工具, 通过 8666 端口访问, 便于开发调试, 可以根据实际情况, 修改端口映射, 勿与其他端口冲突
+  sz_mysql_adminer:
+    image: adminer
+    restart: always
+    networks: 
+      - sz-dev-test
+    ports:
+      - 8666:8080
+
+  # 缓存, token 之类的会用到, 所以也就默认提供
+  sz_redis:
+    image: redis:alpine
+    restart: always
+    networks: 
+      - sz-dev-test
+    ports: 
+      # 暴露 redis 的端口, 便于调试开发, 便于使用 redis 管理工具
+      - 6379:6379
+  
+  # 如果应用服务拆成多个部分, 通过 Vert.x 的 EventBus 通信, 则应用需要部署成 Vert.x 的集群模式, Vert.x集群依赖 zookeeper 服务
+  # 注: 如果使用了SZ框架提供的基于MySql的PlanTask服务, 则需要部署成 Vert.x 集群模式
+  sz_zookeeper:
+    image: zookeeper:latest
+    restart: always
+    networks: 
+      - sz-dev-test
+    ports: 
+      # 暴露给 zookeeper client 提供服务的端口, 便于开发调试 
+      - 2181:2181
+  
+  # 应用可以使用第三方的消息队列服务, 例如使用: rabbitmq, 如果不需要, 可以将下面的 sz_rabbitmq 和 sz_rabbitmq_manager 两段注释掉
+  # 镜像使用参考: https://hub.docker.com/_/rabbitmq
+  sz_rabbitmq:
+    image: rabbitmq:management-alpine
+    hostname: sz_rabbitmq
+    restart: always
+    networks: 
+      - sz-dev-test
+    ports: 
+      - 5672:5672
+      - 15672:15672
+
+  # 应用服务器, 所有的应用都作为容器内 supervisor 管理的服务
+  # 参考: https://github.com/LoveInShenZhen/MyDockerfiles/tree/master/java/sz_all_in_one
+  sz_app_server:
+    image: dragonsunmoon/sz_all_in_one:latest
+    restart: always
+    # 应用服务, nginx 的conf和html 都是通过 sz_app_server 的ssh服务进行部署更新的, 所以把需要的数据卷都挂载上
+    volumes: 
+      - type: volume
+        source: sz-apps-data
+        target: /sz/deploy/
+      - type: volume
+        source: sz-nginx-html
+        target: /web_html/     
+      - type: volume
+        source: sz-nginx-conf
+        target: /etc/nginx/
+    networks: 
+      - sz-dev-test
+    ports: 
+      # 按照需要, 添加需要暴露出去的端口, 为了方便开发调试, 默认暴露 9000 和 5005 (remote debug)
+      # nginx 的端口暴露为 8080 和 8443, 根据需要, 自行修改端口映射
+      # 根据需要, 自行添加新的端口映射
+      - "10022:22"
+      - "8080:80"
+      - "8443:443"
+      - "9000:9000"
+      - "5005:5005"
+    depends_on:
+      - sz_mysql
+      - sz_redis
+      - sz_zookeeper
+
+# 同一个网络内的容器, 彼此之间可以通过 service name进行访问, 因为 docker compose 会自动将server的名称在网络配置里, 添加一个别名
+# 这样 service 之间可以通过名称直接访问 (简单说, 通过server name可以ping通)
+networks:
+  sz-dev-test:
+
+# 采用数据卷的方式, 是因为, 这种方式可以同时在 mac, linux 和 windows 下都工作
+volumes:
+  sz-apps-data:
+  sz-mysql-data:
+  sz-nginx-html:
+  sz-nginx-conf:
+
+```
+
+
 
