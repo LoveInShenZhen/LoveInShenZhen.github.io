@@ -311,12 +311,12 @@ optional arguments:
 ```
 
 ## 测试环境 SZ应用 的进程管理器
-* 测试环境里, 部署应用的容器, 使用的镜像是 _dragonsunmoon/sz_all_in_one:latest_
+* 测试环境里, 部署应用的容器, 使用的镜像是 **dragonsunmoon/sz_all_in_one:latest**
 * 该镜像提供了 ssh 服务, 可以通过 ssh 登录到容器内部, 进行操作
 * 该容器使用了 [Python Supervisor](http://supervisord.org/index.html) 来管理多个不同的 SZ 应用的进程.
 * 镜像的构建和 Docker File 请参考: https://github.com/LoveInShenZhen/MyDockerfiles/tree/master/java/sz_all_in_one
-* 每个部署在该容器内的应用, 都对应一个 Supervisor 的配置文件, 目录: **/etc/supervisor/conf.d/**, 该文件由部署的脚本, 自动创建
-* 可以使用 supervisorctl 命令来 启动/停止/重启/查看状态 应用
+* 每个部署在该容器内的应用, 都对应一个 Supervisor 的配置文件, 所在目录: **/etc/supervisor/conf.d/**, 该文件由部署的脚本自动创建
+* 可以使用 **supervisorctl** 命令来 启动/停止/重启/查看状态 应用
 
 ```bash
 # 假设应用的名称为 api_server
@@ -334,3 +334,12 @@ supervisorctl restart api_server
 supervisorctl status api_server
 
 ```
+
+## 测试环境下 SZ 应用的配置管理
+* 为每个 SZ 应用创建一个单独的目录, 保存该应用在测试环境下的配置文件
+* 配置文件应该包括如下的几个文件
+  * application.conf
+  * logback.xml
+  * vertxOptions.json
+  * zookeeper.json
+* 使用 sz_deploy.py conf 子命令进行配置部署和更新操作
