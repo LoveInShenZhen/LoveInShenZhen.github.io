@@ -13,7 +13,8 @@
     * [Redis缓存](sz_framework/cache/redis_cache.md)
   * [websocket](sz_framework/websocket/websocket_sample.md)
   * [前后端分离](sz_framework/front_and_backend.md)
-* [经验之谈](best_practice/)
+  * [DevOps (交付和部署)](sz_framework/devops/)
+    * [快速搭建一套开发测试环境](sz_framework/devops/deploy_test_env.md)
     
 
 
