@@ -342,4 +342,4 @@ supervisorctl status api_server
   * logback.xml
   * vertxOptions.json
   * zookeeper.json
-* 使用 sz_deploy.py conf 子命令进行配置部署和更新操作
+* 使用 sz_deploy.py conf 子命令, 为指定的应用进行配置部署和更新操作
