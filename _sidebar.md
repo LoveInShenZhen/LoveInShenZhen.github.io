@@ -15,6 +15,8 @@
   * [前后端分离](sz_framework/front_and_backend.md)
   * [DevOps (交付和部署)](sz_framework/devops/)
     * [快速搭建一套开发测试环境](sz_framework/devops/deploy_test_env.md)
+    * [部署之: SZ 应用配置](sz_framework/devops/deploy_app_config.md)
+    * [部署之: SZ 应用日志配置](sz_framework/devops/deploy_log_config.md)
     
 
 

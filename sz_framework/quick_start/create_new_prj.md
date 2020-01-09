@@ -28,10 +28,7 @@ Hello
 │   ├── application.conf
 │   ├── logback.xml
 │   ├── route
-│   ├── route.websocket
-│   ├── vertx-default-jul-logging.properties
-│   ├── vertxOptions.json
-│   └── zookeeper.json
+│   └── route.websocket
 ├── gradle
 │   └── wrapper
 │       ├── gradle-wrapper.jar
@@ -56,9 +53,7 @@ Hello
         │       └── sample
         │           └── User.kt
         └── resources
-            └── ebean.mf
 
-15 directories, 19 files
 ```
 
 ## 运行项目
