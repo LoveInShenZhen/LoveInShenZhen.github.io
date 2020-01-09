@@ -265,7 +265,7 @@ optional arguments:
                         用于ssh登录的证书路径,默认:~/.ssh/id_rsa
 ```
 
-* * 子命令: **conf** _指定gradle工程目录路径 和 测试环境配置文件目录, 部署上传/更新到目标服务器上, 并重启应用_
+* * 子命令: **conf** _指定gradle工程目录路径 和 测试环境配置文件目录, 将配置文件部署上传/更新到目标服务器上, 并重启应用_
 
 ```bash
 ./sz_deploy.py conf --help
@@ -340,6 +340,4 @@ supervisorctl status api_server
 * 配置文件应该包括如下的几个文件
   * application.conf
   * logback.xml
-  * vertxOptions.json
-  * zookeeper.json
 * 使用 sz_deploy.py conf 子命令, 为指定的应用进行配置部署和更新操作
