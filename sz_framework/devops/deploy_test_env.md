@@ -189,6 +189,8 @@ docker-compose -f sz-docker-compose.yml up -d
 ```bash
 docker-compose -f sz-docker-compose.yml down --volumes
 ```
+> * 如果去掉 **--volumes** 参数, 那么删除该测试环境的时候, 不会同时删除该测试环境使用的数据卷.
+> * 保留数据卷, 那么下次重新创建测试环境的时候, 测试环境会使用已经存在的数据卷(数据卷的名称要保证不变)
 
 * 启动测试环境
 ```bash
@@ -216,31 +218,45 @@ ssh-copy-id -p 10022 root@test_server_ip
 ```
 
 ### 获取脚本
+* 脚本运行需要 Python3 环境
+
 ```bash
 svn export https://github.com/LoveInShenZhen/DeploySamples.git/trunk/sz/dev_and_test/sz_deploy
+# 安装依赖的 python 包
+cd sz_deploy
+pip install -r requirements.txt
 ```
 
 * 查看命令帮助
-```bash
-cd sz_deploy
-./sz_deploy.py --help
-```
 
-```
-usage: sz_deploy.py [-h] {app,conf,undeploy} ...
+```bash
+# 在 sz_deploy 目录下
+./sz_deploy.py --help
+# 输出如下所示:                             
+usage: sz_deploy.py [-h]
+                    {app,conf,undeploy,list_nginx_conf,dump_nginx_conf,install_nginx_conf,uninstall_nginx_conf,install_web_app,uninstall_web_app}
+                    ...
 
 SZ 后端 [应用]/[配置文件] 部署工具.
 
 optional arguments:
-  -h, --help           show this help message and exit
+  -h, --help            show this help message and exit
 
 子命令:
   注: 通过以下子命令指定部署/操作类型, 详细参数用法请在子命令后加上 -h 查看
 
-  {app,conf,undeploy}
-    app                部署[应用]到目标服务器
-    conf               部署[一组配置文件]到目标服务器
-    undeploy           清理删除部署在目标服务器的[应用]和[配置]
+  {app,conf,undeploy,list_nginx_conf,dump_nginx_conf,install_nginx_conf,uninstall_nginx_conf,install_web_app,uninstall_web_app}
+    app                 部署[应用]到目标服务器
+    conf                部署[一组配置文件]到目标服务器
+    undeploy            清理删除部署在目标服务器的[应用]和[配置]
+    list_nginx_conf     列出服务器上 /etc/nginx/conf.d/ 下所有的配置文件
+    dump_nginx_conf     输出指定的 nginx 配置文件内容
+    install_nginx_conf  部署/更新指定的 nginx 配置文件
+    uninstall_nginx_conf
+                        从目标主机里删除指定的 nginx 配置
+    install_web_app     部署/更新指定的 web 应用
+    uninstall_web_app   从目标服务器上删除指定的 web 应用
+
 ```
 
 * 查看子命令的帮助
@@ -337,7 +353,38 @@ supervisorctl status api_server
 
 ## 测试环境下 SZ 应用的配置管理
 * 为每个 SZ 应用创建一个单独的目录, 保存该应用在测试环境下的配置文件
-* 配置文件应该包括如下的几个文件
-  * application.conf
-  * logback.xml
+* 配置文件应该包括如下的2个文件
+  * **application.conf**
+  * **logback.xml**
 * 使用 sz_deploy.py conf 子命令, 为指定的应用进行配置部署和更新操作
+
+## 前端配置
+### nginx 部署/配置
+* 在容器内, 我们可以同时部署多个不同的 _web应用的静态页面_, 每个 _web应用_ 使用一个单独的 nginx 配置文件
+* 我们提供了一个 nginx 配置文件的 [**sample**](https://github.com/LoveInShenZhen/DeploySamples/blob/master/sz/dev_and_test/sz_deploy/nginx_sample.conf)
+* sz_deploy.py 脚本提供了4个子命令用来帮助部署 nginx 配置文件.
+  > * **list_nginx_conf**     列出服务器上 /etc/nginx/conf.d/ 下所有的配置文件
+  > * **dump_nginx_conf**     输出指定的 nginx 配置文件内容
+  > * **install_nginx_conf**  部署/更新指定的 nginx 配置文件
+  > * **uninstall_nginx_conf**   从目标主机里删除指定的 nginx 配置
+
+### html 静态页面部署
+* 我们在 sz-docker-compose.yml 里为 html 静态页面的部署, 配置了数据卷: **sz-nginx-html** 
+* 静态页面会保存到数据卷里 **sz-nginx-html**. 删除测试环境时, 可以选择不同时删除数据卷, 下次重建测试环境的时候, 可以继续使用该数据卷.
+* 数据卷 **sz-nginx-html** 在容器内映射的目录为: **/web_html**
+* 在容器内, 我们可以同时部署多个不同的 _web应用的静态页面_, 每个 _web应用_ 使用一个单独的 nginx 配置文件, 使用不同的 **listen** _(端口)_ 或者 **server_name**. 请参考 nginx 的配置:
+  > * **listen** [配置项说明](https://nginx.org/en/docs/http/ngx_http_core_module.html#listen)
+  > * **server_name** [配置项说明](https://nginx.org/en/docs/http/server_names.html)
+* 每一个独立的 _web应用_ 部署时, 应该在 **/web_html** 目录下单独创建一个子目录, 用于存放应用的静态内容. 举例说明如下:
+  > * 假设我们创建一个 web应用: **mobile_web**
+  > * 创建目录 **/web_html/mobile_web** 用于存放应用的静态内容
+  > * nginx 中 **location** 配置节对应如下:
+  > ```
+      location / {
+          root   /web_html/mobile_web;
+          index  index.html index.htm;
+      }
+    ```
+* sz_deploy.py 脚本提供了2个子命令用来帮助部署 web 应用的静态页面.
+  > * **install_web_app** 署/更新指定的 web 应用
+  > * **uninstall_web_app** 从目标服务器上删除指定的 web 应用
