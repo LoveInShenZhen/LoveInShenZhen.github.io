@@ -17,6 +17,7 @@
     * [快速搭建一套开发测试环境](sz_framework/devops/deploy_test_env.md)
     * [部署之: SZ 应用配置](sz_framework/devops/deploy_app_config.md)
     * [部署之: SZ 应用日志配置](sz_framework/devops/deploy_log_config.md)
+    * [搭建私有k8s集群](sz_framework/devops/build_k8s_cluster.md)
     
 
 
