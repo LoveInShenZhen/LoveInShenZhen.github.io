@@ -2,92 +2,29 @@
 
 ### 完整配置示例
 ```json5
-redis {
-
-  globalConfig {
-    // redis密码是否要求加密, 默认为 false, 密码为明文
-    encryptPasswd = false
-
-    // 当 encryptPasswd = true 的时候, redis的密码将使用 Rsa 加密
-    // 所以需要指定用于解密的私钥文件
-    privateKeyFile = "conf/privateKey.pem"
+app {
+  httpServer {
+    port = 9000
+    host = "0.0.0.0"
   }
 
-  servers {
-
-    default {
-      // 工作模式: STANDALONE, SENTINEL, CLUSTER, 默认为: STANDALONE 模式
-      workingMode = "STANDALONE"
-      // 当工作模式为 SENTINEL 和 CLUSTER, 会根据 servers 配置来创建 redisClient
-      // eg:
-      // SENTINEL 时: servers = ["SENTINEL_1:port", "SENTINEL_2:port", "SENTINEL_3:port"]
-      // CLUSTER 时: servers = ["Redis_1:port", "Redis_2:port", "Redis_3:port"]
-      servers = []
-      // 当工作模式为: SENTINEL 时, 还需要设置 masterName, 这个需要和 sentinel.conf 配置的一致
-      masterName = "redis_master"
-      // 默认连接本地的 redis server
-      host = "localhost"
-      port = 6379
-      // this is connection timeout in ms
-      timeout = 2000
-      database = 0
-      netClientOptions {
-        reusePort = true,
-        tcpNoDelay = true,
-        tcpKeepAlive = true,
-        tcpFastOpen = true,
-        tcpQuickAck = true,
-        connectTimeout = 2000
+  cache {
+    // 默认配置一个名称为 local_redis 的redis 缓存, 默认连接本机上的 redis server
+    configs {
+      // 配置项的 key 为缓存名称, 缓存名称不能重复
+      local_redis_cache {
+        // 缓存实现对应的工厂类,
+        factory = "sz.scaffold.redis.cache.RedisCacheFactory"
+        // 缓存参数, 根据实现类的不同, 参数也不同
+        // redis 缓存参数配置请参考:
+        // 参考1: https://vertx.io/docs/vertx-redis-client/kotlin/#_connecting_to_redis
+        // 参考2: https://vertx.io/docs/apidocs/io/vertx/redis/client/RedisOptions.html
+        // 参考3: package io.vertx.redis.client 下的 RedisOptionsConverter.java
+        options {
+          // endpoint 格式说明: redis://[:password@]host[:port][/db-number]
+          endpoints = ["redis://localhost:6379/0"]
+        }
       }
-      ssl = false
-      password = ""
-
-      // 如果其他的 Redis 数据连接配置,没有指定pool配置, 则默认使用与 redis.servers.default.pool 相同的配置
-      pool {
-        // 基本参数
-
-        // 数量控制参数
-        // 链接池中最大连接数,默认为8
-        maxTotal = 8
-        // 链接池中最大空闲的连接数,默认也为8
-        maxIdle = 8
-        // 连接池中最少空闲的连接数,默认为2
-        minIdle = 2
-
-        // 驱逐检测的间隔时间, 默认10分钟
-        timeBetweenEvictionRunsSeconds = 600
-
-        // 超时参数
-        // 从对象池里借对象时的超时时间, 拍脑袋决定默认值 5000 ms
-        // 设置为 0 或者负数的时候, 表示不进行超时控制
-        borrowTimeoutMs = 5000
-
-        // 额外参数
-        operationTimeout = -1
-      }
-
-    }
-  }
-
-}
-```
-
-### 精简配置
-* Redis配置的默认参数, 可以应付绝大多数的情况, 所以我们一般可以使用如下的精简配置
-* 可以有多组Redis配置, sz框架里, 默认的一组Redis配置的 _名称_ 为: **default**
-
-#### 精简配置示例
-* 连接 Redis 单机, 假设主机名为: localhost, 默认端口: 6379, 默认连接 0 号数据库, Redis 没有设置密码
-
-```json5
-redis {
-  servers {
-    default {
-      workingMode = "STANDALONE"
-      host = "localhost"
-      port = 6379
-      database = 0
-      password = ""
     }
   }
 }
@@ -95,50 +32,56 @@ redis {
 
 ### 代码示例
 ```kotlin
-package com.api.server.controllers
+package com.api.server.controllers.sample
 
-import com.api.server.controllers.reply.HelloReply
+import com.api.server.controllers.sample.reply.MessageReply
 import sz.scaffold.annotations.Comment
-import sz.scaffold.cache.redis.RedisCacheApi
+import sz.scaffold.cache.CacheManager
 import sz.scaffold.controller.ApiController
 import sz.scaffold.controller.reply.ReplyBase
 
+//
+// Created by kk on 2019/11/20.
+//
 
+@Comment("Redis 缓存测试")
 class RedisSample : ApiController() {
 
-    @Comment("测试缓存,协程方式接口 [set]")
-    suspend fun setKeyAwait(@Comment("缓存键") key: String,
-                            @Comment("缓存值") value: String,
-                            @Comment("缓存超时时间") timeOut: Long): ReplyBase {
+    // application.conf 中, app.cache.configs 下应该有对应名称为 "local_redis_cache" 的缓存配置
+    private val cache by lazy { CacheManager.asyncCache(cacheName = "local_redis_cache") }
+
+    @Comment("Redis缓存 set 测试")
+    suspend fun setCache(@Comment("缓存键") key: String,
+                         @Comment("缓存值") value: String,
+                         @Comment("缓存超时时间") timeOut: Long): ReplyBase {
         val reply = ReplyBase()
-
-        RedisCacheApi.default.setAwait(key, value, timeOut)
-
+        cache.setAwait(key, value, timeOut)
         return reply
     }
 
-    @Comment("测试缓存,协程方式接口 [get]")
-    suspend fun getValueAwait(@Comment("缓存键") key: String): HelloReply {
-        val reply = HelloReply()
-        reply.msg = RedisCacheApi.default.getOrNullAwait(key) ?: "不存在"
+    @Comment("Redis缓存 get 测试")
+    suspend fun getCache(@Comment("缓存键") key: String): MessageReply {
+        val reply = MessageReply()
+        reply.msg = cache.getOrElseAwait(key) {
+            "缓存不存在"
+        }
         return reply
     }
 
-    @Comment("测试缓存,协程方式接口 [exists]")
-    suspend fun existsAwait(@Comment("缓存键") key: String): HelloReply {
-        val reply = HelloReply()
-        reply.msg = if (RedisCacheApi.default.existsAwait(key)) "存在" else "不存在"
-        return reply
-    }
-
-    @Comment("测试缓存,协程方式接口 [del]")
-    suspend fun delAwait(@Comment("缓存键") key: String): ReplyBase {
+    @Comment("Redis缓存 del 测试")
+    suspend fun delCache(@Comment("缓存键") key: String): ReplyBase {
         val reply = ReplyBase()
-        RedisCacheApi.default.delAwait(key)
+        cache.delAwait(key)
+        return reply
+    }
+
+    @Comment("Redis缓存, 测试指定key的缓存项是否存在")
+    suspend fun existsCache(@Comment("缓存键") key: String): MessageReply {
+        val reply = MessageReply()
+        reply.msg = if (cache.existsAwait(key)) "存在" else "不存在"
         return reply
     }
 }
-
 ```
 
 ### 示例完整代码
